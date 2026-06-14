@@ -6,7 +6,7 @@
     <a href="https://github.com/SoukoX/SENTINEL/stargazers"><img src="https://img.shields.io/github/stars/SoukoX/SENTINEL?style=flat-square" alt="Stars"></a>
     <a href="https://github.com/SoukoX/SENTINEL/issues"><img src="https://img.shields.io/github/issues/SoukoX/SENTINEL?style=flat-square" alt="Issues"></a>
     <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat-square" alt="License"></a>
-    <a href="https://github.com/SoukoX/SENTINEL/actions"><img src="https://img.shields.io/github/actions/workflow/status/SoukoX/SENTINEL/build.yml?style=flat-square" alt="Build"></a>
+
   </p>
   <p>
     <code>curl -sL https://raw.githubusercontent.com/SoukoX/SENTINEL/main/install.sh | bash</code>
@@ -142,7 +142,7 @@ If SENTINEL saves you time or helps your work, consider [sponsoring the project]
 
 ## Community
 
-- [Discussions](https://github.com/SoukoX/SENTINEL/discussions) — ask questions, share findings, connect with users
+- ~~Discussions~~ — coming soon (enable in repo Settings → Features)
 - [Issues](https://github.com/SoukoX/SENTINEL/issues) — bug reports & feature requests
 
 ---
