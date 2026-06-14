@@ -37,4 +37,7 @@ reports/
 # Environment
 .env
 .env.*
+
+# Build
+sentinel.spec
 added to .gitignore
