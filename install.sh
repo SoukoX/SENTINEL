@@ -64,8 +64,10 @@ curl -#L "${URL}" -o "${TMPFILE}" || {
 }
 chmod +x "${TMPFILE}"
 
-if [ -f "${INSTALL_DIR}/${BIN_NAME}" ] && lsof "${INSTALL_DIR}/${BIN_NAME}" >/dev/null 2>&1; then
-  echo -e "  ${YELLOW}SENTINEL is running — swapping on next start…${NC}"
+if mv -f "${TMPFILE}" "${INSTALL_DIR}/${BIN_NAME}" 2>/dev/null; then
+  : # success
+else
+  echo -e "  ${YELLOW}SENTINEL is running — swapping after exit…${NC}"
   SWAP_SCRIPT="${TMPFILE}-swap.sh"
   cat > "${SWAP_SCRIPT}" << EOF
 #!/bin/bash
@@ -75,10 +77,7 @@ chmod +x "${INSTALL_DIR}/${BIN_NAME}"
 rm -f "${SWAP_SCRIPT}"
 EOF
   chmod +x "${SWAP_SCRIPT}"
-  echo -e "  ${YELLOW}Stop sentinel and re-run it to complete the update.${NC}"
-  echo -e "  ${YELLOW}Or run: bash ${SWAP_SCRIPT} && sentinel${NC}"
-else
-  mv -f "${TMPFILE}" "${INSTALL_DIR}/${BIN_NAME}"
+  echo -e "  ${YELLOW}Run: bash ${SWAP_SCRIPT}${NC}"
 fi
 
 if [[ ":$PATH:" != *":${INSTALL_DIR}:"* ]]; then
