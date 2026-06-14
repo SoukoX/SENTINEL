@@ -12,6 +12,7 @@
     <code>curl -sL https://raw.githubusercontent.com/SoukoX/SENTINEL/main/install.sh | bash</code>
   </p>
   <p><strong>One command. Zero dependencies. Full AI-powered pentesting.</strong></p>
+  <p><strong>Auto-updates</strong> — SENTINEL checks for new versions on launch and updates itself.</p>
 </div>
 
 ---
@@ -26,6 +27,8 @@ SENTINEL is an **AI-native agent** that thinks, explains, and adapts.
 | Raw tool output you have to interpret | **AI explains every finding** in plain English with remediation steps |
 | Tedious multi-tool workflows | **48 tools orchestrated** across a single 13-stage pipeline |
 | Brittle scanners that fail silently | **Self-healing pipeline** — resumes from failures, not from scratch |
+| Scanners don't learn from past scans | **Persistent memory** — remembers targets, FPs, and what works |
+| Manual updates every release | **Auto-updates** — checks and upgrades itself on launch |
 | Your data leaves your machine | **100% local** — zero telemetry, no cloud dependency |
 | Expensive AI subscriptions | **Free backends** — Ollama (local, no key), Cerebras, OpenRouter, OpenCode |
 | Restrictive "ethics" filters | **Uncensored** — no gatekeeping, no refusal |
@@ -40,10 +43,10 @@ SENTINEL is an **AI-native agent** that thinks, explains, and adapts.
 | Natural language chat interface | Recon → exploitation → reporting | Crashes don't kill your scan |
 | AI generates & interprets commands | AI orchestrates every tool | Auto-retry, adapt, resume |
 | Learns from every scan | No scripting glue needed | Interrupt & continue later |
-| **🔒 Zero Trust Architecture** | **💸 Free AI Backends** | **🚀 One-Click Install** |
-| 100% local, zero telemetry | Ollama (local, no key), Cerebras, OpenRouter, OpenCode | Single binary, no Python |
-| API keys needed for cloud backends only | All free tiers, no subscription | `curl ... \| bash` and done |
-| Your data never leaves | Works fully offline with Ollama | Works on Linux & macOS |
+| **🔒 Zero Trust Architecture** | **💸 Free AI Backends** | **🧠 Persistent Memory** |
+| 100% local, zero telemetry | Ollama (local, no key), Cerebras, OpenRouter, OpenCode | Learns from every scan |
+| API keys needed for cloud backends only | All free tiers, no subscription | Target profiles, FP registry, chat history |
+| Your data never leaves | Works fully offline with Ollama | Custom notes — you control what's remembered |
 
 ---
 
