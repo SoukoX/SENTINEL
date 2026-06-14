@@ -57,7 +57,7 @@ echo -e "  Downloading ${BIN_NAME}…"
 mkdir -p "${INSTALL_DIR}"
 echo -e "  ${YELLOW}URL: ${URL}${NC}"
 TMPFILE=$(mktemp)
-curl -#L "${URL}" -o "${TMPFILE}" || {
+curl -L "${URL}" -o "${TMPFILE}" || {
   echo -e "${RED}✘ Download failed.${NC}"
   rm -f "${TMPFILE}"
   exit 1
