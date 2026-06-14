@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-REPO="YOUR_USERNAME/sentinel"
+REPO="SoukoX/SENTINEL"
 BIN_NAME="sentinel"
 INSTALL_DIR="${HOME}/.local/bin"
 
