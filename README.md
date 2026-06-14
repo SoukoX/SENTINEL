@@ -97,7 +97,9 @@ go install -v github.com/projectdiscovery/katana/cmd/katana@latest
 
 ## Screenshots
 
-<!-- Add screenshots here once available -->
+UI of version 1:
+<img width="1857" height="921" alt="image" src="https://github.com/user-attachments/assets/28233d16-d145-4f64-aef0-db845b75c37b" />
+
 
 ---
 
