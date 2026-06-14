@@ -9,7 +9,7 @@
 ## Install
 
 ```bash
-curl -sL https://raw.githubusercontent.com/YOUR_USERNAME/sentinel/main/install.sh | bash
+curl -sL https://raw.githubusercontent.com/SoukoX/SENTINEL/main/install.sh | bash
 ```
 
 **Requirements:** Linux x86_64, Python 3.10+ *(only needed if running from source)*  
