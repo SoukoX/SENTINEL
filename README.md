@@ -142,7 +142,7 @@ If SENTINEL saves you time or helps your work, consider [sponsoring the project]
 
 ## Community
 
-- ~~Discussions~~ — coming soon (enable in repo Settings → Features)
+- [Discussions](https://github.com/SoukoX/SENTINEL/discussions) — ask questions, share findings, connect with users
 - [Issues](https://github.com/SoukoX/SENTINEL/issues) — bug reports & feature requests
 
 ---

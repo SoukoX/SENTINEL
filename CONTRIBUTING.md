@@ -97,7 +97,7 @@ Active contributors who file quality bug reports and feature ideas may be invite
 - Be respectful and constructive
 - One issue per bug/feature — don't bundle unrelated things
 - Search existing issues before opening a new one
-- For questions, use Discussions (enable in repo Settings → Features) — not issues
+- For questions, use [Discussions](https://github.com/SoukoX/SENTINEL/discussions) — not issues
 
 ---
 
