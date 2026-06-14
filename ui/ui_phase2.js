@@ -1,7 +1,4 @@
 /**
- * SENTINEL UI — Phase 2 Additions
- * ui_phase2.js — Drop this <script> block into ui.html before </body>
- *
  * Phase 2 features added to the Web UI:
  *   1. Memory Panel — Target profiles, FP registry, payload stats, skill registry
  *   2. False Positive marking — Right-click or button on any finding
@@ -11,17 +8,13 @@
  *   6. Settings Panel — Retention policy, config, disk usage
  *   7. Similar Findings — "Seen before?" context on each finding
  *   8. Audit Log viewer — Show what SENTINEL has done
- *
- * Integration: This file requires ui.html Phase 1 to already be present.
- * Add the HTML snippets below to the sidebar + main panel area,
- * then include this script at the bottom of ui.html.
  */
 
-// ══════════════════════════════════════════════════════════════════
-// PHASE 2: MEMORY PANEL
-// ══════════════════════════════════════════════════════════════════
 
-// HTML to add to sidebar nav (after existing nav items):
+// ## PHASE 2: MEMORY PANEL
+
+
+
 const MEMORY_NAV_HTML = `
 <div class="sb-section">Intelligence</div>
 <div class="navitem" id="nav-memory" onclick="showPanel('memory')">
@@ -33,7 +26,7 @@ const MEMORY_NAV_HTML = `
 </div>
 `;
 
-// HTML for the Memory panel (add as new .panel div after existing panels):
+// HTML for the Memory panel 
 const MEMORY_PANEL_HTML = `
 <div class="panel" id="panel-memory">
   <div class="report-tabs">
