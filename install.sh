@@ -56,11 +56,30 @@ URL="https://github.com/${REPO}/releases/download/${LATEST}/${ASSET}"
 echo -e "  Downloading ${BIN_NAME}…"
 mkdir -p "${INSTALL_DIR}"
 echo -e "  ${YELLOW}URL: ${URL}${NC}"
-curl -#L "${URL}" -o "${INSTALL_DIR}/${BIN_NAME}" || {
+TMPFILE=$(mktemp)
+curl -#L "${URL}" -o "${TMPFILE}" || {
   echo -e "${RED}✘ Download failed.${NC}"
+  rm -f "${TMPFILE}"
   exit 1
 }
+chmod +x "${TMPFILE}"
+
+if [ -f "${INSTALL_DIR}/${BIN_NAME}" ] && lsof "${INSTALL_DIR}/${BIN_NAME}" >/dev/null 2>&1; then
+  echo -e "  ${YELLOW}SENTINEL is running — swapping on next start…${NC}"
+  SWAP_SCRIPT="${TMPFILE}-swap.sh"
+  cat > "${SWAP_SCRIPT}" << EOF
+#!/bin/bash
+sleep 1
+mv -f "${TMPFILE}" "${INSTALL_DIR}/${BIN_NAME}"
 chmod +x "${INSTALL_DIR}/${BIN_NAME}"
+rm -f "${SWAP_SCRIPT}"
+EOF
+  chmod +x "${SWAP_SCRIPT}"
+  echo -e "  ${YELLOW}Stop sentinel and re-run it to complete the update.${NC}"
+  echo -e "  ${YELLOW}Or run: bash ${SWAP_SCRIPT} && sentinel${NC}"
+else
+  mv -f "${TMPFILE}" "${INSTALL_DIR}/${BIN_NAME}"
+fi
 
 if [[ ":$PATH:" != *":${INSTALL_DIR}:"* ]]; then
   SHELL_CONFIG="${HOME}/.$(basename "${SHELL}")rc"
