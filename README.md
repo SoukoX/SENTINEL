@@ -60,6 +60,8 @@ go install -v github.com/projectdiscovery/katana/cmd/katana@latest
 
 ## How to Contribute
 
+See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide.
+
 You don't need to read source code to make SENTINEL better.
 
 ### 🐛 Report Bugs
