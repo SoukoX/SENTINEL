@@ -335,7 +335,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg0);color:var(--t1);font
 <nav class="nav">
   <button class="sb-toggle" id="sb-toggle" onclick="toggleSidebar()" title="Toggle sidebar">☰</button>
   <div class="logo"><div class="logo-icon">⚡</div><span style="color:var(--red);font-weight:700">SENTINEL</span><span class="badge" style="background:rgba(255,69,97,.15);color:var(--red);border-color:rgba(255,69,97,.3)">RED TEAM</span></div>
-  <span class="badge">v2.0 — Phase 3</span>
+  <span class="badge">v1.0</span>
   <div class="spacer"></div>
   <div class="conn-status">
     <div class="conn-dot" id="conn-dot"></div>
@@ -349,9 +349,9 @@ html,body{height:100%;overflow:hidden;background:var(--bg0);color:var(--t1);font
     <div class="navitem active" id="ni-agent"      onclick="showPanel('agent')" title="AI Agent — chat with SENTINEL"><span class="ico">🛡️</span>Agent<span class="nbadge" id="badge-agent">–</span></div>
     <div class="navitem"        id="ni-terminal"  onclick="showPanel('terminal')" title="Live scan output &amp; agent logs"><span class="ico">💻</span>Terminal<span class="nbadge" id="badge-terminal">–</span></div>
     <div class="navitem"        id="ni-results"   onclick="showPanel('results')" title="Scan findings &amp; vulnerability report"><span class="ico">📋</span>Results<span class="nbadge" id="badge-results">0</span></div>
-    <div class="navitem"        id="ni-memory"    onclick="showPanel('memory');refreshMemory()" title="Cross-scan memory &amp; target profiles"><span class="ico">🧠</span>Memory<span class="nbadge" id="badge-memory">–</span></div>
+
     <div class="navitem"        id="ni-tools"     onclick="showPanel('tools')" title="Tool installer &amp; health check"><span class="ico">🔧</span>Tools</div>
-    <div class="navitem"        id="ni-campaigns" onclick="showPanel('campaigns')" title="Multi-target batch campaigns"><span class="ico">🎯</span>Campaigns</div>
+
     <div class="navitem"        id="ni-settings"  onclick="showPanel('settings');loadSettingsPanel()" title="Data retention, disk usage, config"><span class="ico">⚙️</span>Settings</div>
     <div class="sb-section" style="margin-top:6px">Tool Status</div>
     <div class="tool-list" id="tool-list">
@@ -388,7 +388,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg0);color:var(--t1);font
       <div class="report-tabs">
         <div class="rtab active" onclick="switchReportTab('overview')">📊 Overview</div>
         <div class="rtab" onclick="switchReportTab('findings')">🐛 Findings</div>
-        <div class="rtab" onclick="switchReportTab('charts')">📈 Charts</div>
       </div>
       <div class="res-toolbar">
         <span style="font-family:var(--mono);font-size:12px;color:var(--t2)">Scan Results</span>
@@ -414,69 +413,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg0);color:var(--t1);font
           </div>
         </div>
 
-        <!-- CHARTS TAB -->
-        <div class="report-section" id="rtab-charts">
-          <div id="res-charts-body">
-            <div class="empty"><div class="big">📈</div><div>Run a scan to see charts.</div></div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <!-- ══════════════ MEMORY — Phase 2 full panel ══════════════ -->
-    <div class="panel" id="panel-memory">
-      <div class="report-tabs" id="memory-tabs">
-        <div class="rtab active" onclick="switchMemoryTab('targets')">🎯 Target Profiles</div>
-        <div class="rtab" onclick="switchMemoryTab('fps')">🚫 False Positives</div>
-        <div class="rtab" onclick="switchMemoryTab('skills')">🔧 Skill Registry</div>
-        <div class="rtab" onclick="switchMemoryTab('payloads')">💉 Payload Stats</div>
-        <div class="rtab" onclick="switchMemoryTab('conversations')">💬 Chat History</div>
-        <div class="rtab" onclick="switchMemoryTab('audit')">📋 Audit Log</div>
-      </div>
-      <div class="report-section active" id="mem-targets" style="overflow-y:auto;padding:18px;flex-direction:column;gap:10px;min-height:0">
-        <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:4px">
-          <div style="font-size:12px;color:var(--t3);font-family:var(--mono)">Cross-scan knowledge — what SENTINEL remembers about each target.</div>
-          <button class="tbtn" onclick="refreshMemory()">↻ Refresh</button>
-        </div>
-        <div id="target-profiles-list">
-          <div class="empty"><div class="big">🧠</div>No targets scanned yet.</div>
-        </div>
-      </div>
-      <div class="report-section" id="mem-fps" style="overflow-y:auto;padding:18px;flex-direction:column;gap:10px;min-height:0">
-        <div style="margin-bottom:12px;font-size:12px;color:var(--t3);font-family:var(--mono)">Confirmed false positives — SENTINEL will never re-alert on these.</div>
-        <div id="fp-list-container"><div class="empty"><div class="big">✅</div>No false positives registered.</div></div>
-      </div>
-      <div class="report-section" id="mem-skills" style="overflow-y:auto;padding:18px;flex-direction:column;gap:10px;min-height:0">
-        <div style="margin-bottom:12px;font-size:12px;color:var(--t3);font-family:var(--mono)">Learned tool effectiveness per tech stack — gets smarter every scan.</div>
-        <div id="skill-registry-container"><div class="empty"><div class="big">🔧</div>No skills learned yet.</div></div>
-      </div>
-      <div class="report-section" id="mem-payloads" style="overflow-y:auto;padding:18px;flex-direction:column;gap:10px;min-height:0">
-        <div style="margin-bottom:12px;font-size:12px;color:var(--t3);font-family:var(--mono)">Payload effectiveness tracking — which payloads work on which tech stacks.</div>
-        <div id="payload-stats-container"><div class="empty"><div class="big">💉</div>No payload data yet.</div></div>
-      </div>
-      <div class="report-section" id="mem-conversations" style="overflow-y:auto;padding:18px;flex-direction:column;gap:8px;min-height:0">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap">
-          <div style="font-size:12px;color:var(--t3);font-family:var(--mono)">Your past conversations with the agent. Stored locally only.</div>
-          <button class="tbtn" onclick="loadConversations()">↻ Refresh</button>
-          <button class="tbtn" onclick="if(confirm('Delete ALL conversation history?')){ws.send(JSON.stringify({action:'clear_conversations'}));}" style="color:var(--red)">🗑 Clear All</button>
-        </div>
-        <div id="conversations-list"><div class="empty"><div class="big">💬</div>No conversations yet. Chat with the agent to build history.</div></div>
-      </div>
-      <div class="report-section" id="mem-audit" style="overflow-y:auto;padding:18px;flex-direction:column;gap:10px;min-height:0">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px;flex-wrap:wrap">
-          <div style="font-size:12px;color:var(--t3);font-family:var(--mono)">Immutable local audit log — every significant action.</div>
-          <select id="audit-filter" onchange="loadAuditLog()" style="background:var(--bg1);border:1px solid var(--border);border-radius:6px;color:var(--t1);padding:5px 9px;font-family:var(--mono);font-size:12px;outline:none">
-            <option value="">All actions</option>
-            <option value="scan_started">Scans started</option>
-            <option value="scan_completed">Scans completed</option>
-            <option value="fp_marked">FPs marked</option>
-            <option value="ai_call">AI calls</option>
-            <option value="export">Exports</option>
-          </select>
-          <button class="tbtn" onclick="loadAuditLog()">↻ Refresh</button>
-        </div>
-        <div id="audit-log-container"><div class="empty"><div class="big">📋</div>No audit entries yet.</div></div>
       </div>
     </div>
 
@@ -489,56 +425,6 @@ html,body{height:100%;overflow:hidden;background:var(--bg0);color:var(--t1);font
       </div>
       <div class="tools-body" id="tools-body">
         <div class="empty" style="grid-column:1/-1"><div class="big">🔧</div><div>Checking tools…</div></div>
-      </div>
-    </div>
-
-    <!-- ══════════════ CAMPAIGNS — Phase 3 ══════════════ -->
-    <div class="panel" id="panel-campaigns">
-      <div style="padding:10px 18px;background:var(--bg2);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:10px;flex-shrink:0">
-        <span style="font-family:var(--mono);font-size:12px;color:var(--t2)">🎯 Multi-Target Campaigns</span>
-        <span class="spacer"></span>
-        <button class="tbtn" onclick="addCampaignTarget()">+ Add Target</button>
-        <button class="tbtn" onclick="launchCampaign()" id="btn-launch-campaign" style="color:var(--green);border-color:rgba(31,216,124,.4)">▶ Launch All</button>
-      </div>
-      <div style="flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:12px;min-height:0">
-        <div class="card">
-          <div class="ctitle">Campaign Configuration</div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
-            <div class="field">
-              <label>Campaign Name</label>
-              <input id="campaign-name" placeholder="Q2 2026 Recon" style="background:var(--bg1);border:1px solid var(--border);border-radius:6px;color:var(--t1);padding:8px 11px;font-family:var(--mono);font-size:13px;outline:none;width:100%"/>
-            </div>
-            <div class="field">
-              <label>Program</label>
-              <select id="campaign-program" style="background:var(--bg1);border:1px solid var(--border);border-radius:6px;color:var(--t1);padding:8px 11px;font-family:var(--mono);font-size:13px;outline:none;width:100%">
-                <option value="">— Select program —</option>
-                <option value="hackerone">HackerOne</option>
-                <option value="bugcrowd">Bugcrowd</option>
-                <option value="intigriti">Intigriti</option>
-                <option value="quick">Quick Scan</option>
-                <option value="deep">Deep Scan</option>
-                <option value="pentest">Internal Pentest</option>
-              </select>
-            </div>
-          </div>
-          <div style="display:flex;align-items:center;gap:8px">
-            <textarea id="campaign-targets-input" placeholder="One target per line:&#10;example.com&#10;api.example.com&#10;sub.example.com" rows="4" style="flex:1;background:var(--bg1);border:1px solid var(--border);border-radius:6px;color:var(--t1);padding:8px 11px;font-family:var(--mono);font-size:13px;outline:none;resize:vertical"></textarea>
-            <button class="tbtn" onclick="parseCampaignTargets()" style="align-self:flex-end">Parse</button>
-          </div>
-          <div style="font-size:11px;color:var(--t3);font-family:var(--mono);margin-top:6px">Targets queue up sequentially. Each runs its own full scan pipeline.</div>
-        </div>
-        <div id="campaign-queue" style="display:flex;flex-direction:column;gap:8px">
-          <div class="empty"><div class="big">🎯</div><div>No targets queued. Enter targets above and click Parse.</div></div>
-        </div>
-        <div class="card" id="campaign-export-card" style="display:none">
-          <div class="ctitle">Export Campaign</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <button class="btn-save json" onclick="exportCampaignJSON()">⬇ Campaign JSON</button>
-            <button class="btn-save md" onclick="exportCIYAML()">⬇ GitHub Actions YAML</button>
-            <button class="btn-save html" onclick="exportCampaignReport()">⬇ Combined Report</button>
-          </div>
-          <div style="font-size:11px;color:var(--t3);font-family:var(--mono);margin-top:8px">CI/CD YAML runs SENTINEL on every push via GitHub Actions. Combined report merges all findings.</div>
-        </div>
       </div>
     </div>
 
@@ -729,6 +615,7 @@ function connect() {
       if (_wsConnectTimer) { clearTimeout(_wsConnectTimer); _wsConnectTimer = null; }
       setConnStatus('connected','Connected');
       setMsg('Connected to server.py','ok');
+      ws.send(JSON.stringify({action:'get_conversations', limit: 200}));
     } catch(e) { console.error('onopen init error', e); }
     // Always check AI backend status so agent-ai-label doesn't stay stuck at "checking…"
     ws.send(JSON.stringify({action:'agent_status'}));
@@ -873,7 +760,7 @@ function handleMsg(msg) {
       break;
     }
     case 'conversations': {
-      renderConversations(msg.conversations);
+      renderAgentChatHistory(msg.conversations);
       break;
     }
     case 'conversation_deleted': {
@@ -1287,37 +1174,34 @@ function loadConversations() {
   ws.send(JSON.stringify({action:'get_conversations', limit: 200}));
 }
 
-function renderConversations(convs) {
-  const container = document.getElementById('conversations-list');
-  if (!container) return;
-  if (!convs || !convs.length) {
-    container.innerHTML = '<div class="empty"><div class="big">💬</div>No conversations yet. Chat with the agent to build history.</div>';
-    return;
-  }
-  // Group by run_id so user+assistant pairs appear together
-  const groups = {};
+function renderAgentChatHistory(convs) {
+  if (!convs || !convs.length) return;
+  const log = document.getElementById('agent-chat-log');
+  if (!log) return;
+  const empty = log.querySelector('div[style*="text-align:center"]');
+  if (empty) empty.remove();
+  const existing = log.querySelectorAll('[data-conv-id]');
+  const existingIds = new Set();
+  existing.forEach(el => existingIds.add(Number(el.dataset.convId)));
+  let count = 0;
   convs.forEach(c => {
-    if (!groups[c.run_id]) groups[c.run_id] = [];
-    groups[c.run_id].push(c);
+    if (existingIds.has(c.id)) return;
+    count++;
+    const role = c.role === 'user' ? 'user' : 'assistant';
+    const labels = { user: 'You', assistant: 'SENTINEL' };
+    const colors = { user: 'var(--blue)', assistant: 'var(--purple)' };
+    const bgs = { user: 'rgba(59,158,255,.05)', assistant: 'rgba(167,139,250,.05)' };
+    const borders = { user: '1px solid rgba(59,158,255,.12)', assistant: '1px solid rgba(167,139,250,.12)' };
+    const div = document.createElement('div');
+    div.dataset.convId = String(c.id);
+    div.style.cssText = `display:flex;flex-direction:column;gap:4px;margin-bottom:10px;padding:10px 14px;border-radius:8px;background:${bgs[role]||'transparent'};border:${borders[role]||'none'}`;
+    let rendered = esc(c.content);
+    rendered = rendered.replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>');
+    rendered = rendered.replace(/(https?:\/\/[^\s<]+)/g, '<a href="$1" target="_blank" style="color:var(--blue);text-decoration:underline">$1</a>');
+    div.innerHTML = `<div style="font-size:11px;font-weight:600;color:${colors[role]||'var(--t1)'};font-family:var(--mono);letter-spacing:.3px">${labels[role]||role}</div><div style="font-size:13px;color:var(--t1);font-family:var(--ui);line-height:1.7;white-space:pre-wrap;word-break:break-word">${rendered}</div>`;
+    log.insertBefore(div, log.firstChild);
   });
-  const runIds = Object.keys(groups).sort((a,b) => Number(b) - Number(a));
-  container.innerHTML = runIds.map(rid => {
-    const entries = groups[rid].sort((a,b) => a.id - b.id);
-    const ts = entries[0]?.created_at || '';
-    return `<div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:6px">
-      <div style="font-size:10px;color:var(--t3);font-family:var(--mono);margin-bottom:6px">${esc(ts)}</div>
-      ${entries.map(e => {
-        const isUser = e.role === 'user';
-        return `<div style="display:flex;gap:10px;margin-bottom:${isUser?'4px':'0'};padding:6px 8px;background:${isUser?'var(--bg1)':'transparent'};border-radius:6px">
-          <span style="font-size:11px;font-weight:600;color:${isUser?'var(--yellow)':'var(--green)'};white-space:nowrap;font-family:var(--mono);min-width:55px">${isUser?'👤 You':'🤖 Agent'}</span>
-          <span style="font-size:12px;color:var(--t1);font-family:var(--mono);word-break:break-word;flex:1">${esc(e.content.substring(0,500))}${e.content.length>500?'…':''}</span>
-          <span style="flex-shrink:0">
-            <button class="tbtn" onclick="ws.send(JSON.stringify({action:'delete_conversation',id:${e.id}}))" title="Delete this message" style="font-size:10px;padding:2px 6px;color:var(--red)">✕</button>
-          </span>
-        </div>`;
-      }).join('')}
-    </div>`;
-  }).join('');
+  if (count > 0) log.scrollTop = log.scrollHeight;
 }
 
 function renderMemoryPanel(data) {
@@ -1870,7 +1754,6 @@ function switchReportTab(tab) {
 function clearResultPanels() {
   document.getElementById('res-overview-body').innerHTML = '<div class="empty"><div class="big">⏳</div><div>Scan running — findings will appear live.</div></div>';
   document.getElementById('res-findings-body').innerHTML = '<div class="empty"><div class="big">⏳</div><div>Scan running…</div></div>';
-  document.getElementById('res-charts-body').innerHTML = '<div class="empty"><div class="big">📈</div><div>Waiting for data…</div></div>';
 }
 
 function renderResults() {
