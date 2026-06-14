@@ -37,3 +37,4 @@ reports/
 # Environment
 .env
 .env.*
+added to .gitignore

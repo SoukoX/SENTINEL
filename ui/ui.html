@@ -349,6 +349,7 @@ html,body{height:100%;overflow:hidden;background:var(--bg0);color:var(--t1);font
     <div class="navitem active" id="ni-agent"      onclick="showPanel('agent')" title="AI Agent — chat with SENTINEL"><span class="ico">🛡️</span>Agent<span class="nbadge" id="badge-agent">–</span></div>
     <div class="navitem"        id="ni-terminal"  onclick="showPanel('terminal')" title="Live scan output &amp; agent logs"><span class="ico">💻</span>Terminal<span class="nbadge" id="badge-terminal">–</span></div>
     <div class="navitem"        id="ni-results"   onclick="showPanel('results')" title="Scan findings &amp; vulnerability report"><span class="ico">📋</span>Results<span class="nbadge" id="badge-results">0</span></div>
+    <div class="navitem"        id="ni-memory"    onclick="showPanel('memory');loadMemoryPanel()" title="Cross-scan memory &amp; agent learning"><span class="ico">🧠</span>Memory<span class="nbadge" id="badge-memory">–</span></div>
 
     <div class="navitem"        id="ni-tools"     onclick="showPanel('tools')" title="Tool installer &amp; health check"><span class="ico">🔧</span>Tools</div>
 
@@ -425,6 +426,48 @@ html,body{height:100%;overflow:hidden;background:var(--bg0);color:var(--t1);font
       </div>
       <div class="tools-body" id="tools-body">
         <div class="empty" style="grid-column:1/-1"><div class="big">🔧</div><div>Checking tools…</div></div>
+      </div>
+    </div>
+
+    <!-- ══════════════ MEMORY — Simplified ══════════════ -->
+    <div class="panel" id="panel-memory">
+      <div class="cfg-body">
+        <div class="card">
+          <div class="ctitle">🧠 Memory Overview</div>
+          <div id="memory-summary-stats" style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px">
+            <div class="stile"><div class="val" id="mem-scans">0</div><div style="font-size:11px;color:var(--t3)">Total Scans</div></div>
+            <div class="stile"><div class="val" id="mem-findings">0</div><div style="font-size:11px;color:var(--t3)">Findings</div></div>
+            <div class="stile"><div class="val" id="mem-fps">0</div><div style="font-size:11px;color:var(--t3)">FP Filtered</div></div>
+            <div class="stile"><div class="val" id="mem-convs">0</div><div style="font-size:11px;color:var(--t3)">Conversations</div></div>
+          </div>
+          <button class="tbtn" onclick="loadMemoryPanel()">↻ Refresh</button>
+        </div>
+
+        <div class="card">
+          <div class="ctitle">🎯 Target Profiles</div>
+          <div style="font-size:12px;color:var(--t3);font-family:var(--mono);margin-bottom:10px">What SENTINEL remembers about each target across sessions.</div>
+          <div id="memory-targets-list">
+            <div class="empty"><div class="big">🧠</div>No targets in memory yet. Run a scan to build memory.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="ctitle">🚫 False Positive Registry</div>
+          <div style="font-size:12px;color:var(--t3);font-family:var(--mono);margin-bottom:10px">Confirmed false positives — SENTINEL will never re-alert on these.</div>
+          <div id="memory-fp-list">
+            <div class="empty"><div class="big">✅</div>No false positives registered.</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="ctitle">📝 Add Custom Memory</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap">
+            <input id="memory-note-target" placeholder="Target (e.g. example.com)" style="flex:1;min-width:150px;background:var(--bg1);border:1px solid var(--border);border-radius:6px;color:var(--t1);padding:8px 11px;font-family:var(--mono);font-size:13px;outline:none">
+            <input id="memory-note-text" placeholder="What to remember about this target" style="flex:2;min-width:200px;background:var(--bg1);border:1px solid var(--border);border-radius:6px;color:var(--t1);padding:8px 11px;font-family:var(--mono);font-size:13px;outline:none">
+            <button class="tbtn" onclick="addMemoryNote()" style="color:var(--green);border-color:rgba(31,216,124,.4)">💾 Save</button>
+          </div>
+          <div id="memory-note-status" style="font-size:12px;font-family:var(--mono);margin-top:8px"></div>
+        </div>
       </div>
     </div>
 
@@ -1204,44 +1247,73 @@ function renderAgentChatHistory(convs) {
   if (count > 0) log.scrollTop = log.scrollHeight;
 }
 
-function renderMemoryPanel(data) {
-  // Phase 2 full panel — update badge and target profiles list
-  const badge = document.getElementById('badge-memory');
-  if (badge) badge.textContent = data.targets?.length || 0;
+function loadMemoryPanel() {
+  if (!ws || ws.readyState !== WebSocket.OPEN) return;
+  ws.send(JSON.stringify({action:'get_memory_summary'}));
+}
 
-  const profilesEl = document.getElementById('target-profiles-list');
+function renderMemoryPanel(data) {
+  const badge = document.getElementById('badge-memory');
+  if (badge) badge.textContent = data.targets?.length || '-';
+  const scans = document.getElementById('mem-scans');
+  if (scans) scans.textContent = data.total_scans || 0;
+  const findings = document.getElementById('mem-findings');
+  if (findings) findings.textContent = data.total_findings || 0;
+  const fps = document.getElementById('mem-fps');
+  if (fps) fps.textContent = data.total_fp_filtered || 0;
+  const convs = document.getElementById('mem-convs');
+  if (convs) convs.textContent = data.conversation_count || 0;
+
+  const profilesEl = document.getElementById('memory-targets-list');
   if (!profilesEl) return;
   if (!data || !data.targets || !data.targets.length) {
-    profilesEl.innerHTML = '<div class="empty"><div class="big">🧠</div>No targets scanned yet. Run your first scan to build memory.</div>';
+    profilesEl.innerHTML = '<div class="empty"><div class="big">🧠</div>No targets in memory yet. Run a scan to build memory.</div>';
     return;
   }
   profilesEl.innerHTML = data.targets.map(p => {
     const sev = p.by_severity || {};
+    const notes = p.notes || '';
     return `
-    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:16px 18px">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:8px;margin-bottom:10px">
+    <div style="background:var(--bg2);border:1px solid var(--border);border-radius:10px;padding:14px 16px;margin-bottom:8px">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start;flex-wrap:wrap;gap:6px">
         <div>
-          <div style="font-size:15px;font-weight:600;font-family:var(--mono);color:var(--t1)">${esc(p.target)}</div>
-          <div style="font-size:11px;color:var(--t3);font-family:var(--mono);margin-top:3px">
-            ${p.scan_count} scan${p.scan_count !== 1 ? 's' : ''} · Last: ${p.last_seen?.slice(0,10) || '-'}
-          </div>
+          <span style="font-size:14px;font-weight:600;font-family:var(--mono);color:var(--t1)">${esc(p.target)}</span>
+          <span style="font-size:11px;color:var(--t3);font-family:var(--mono);margin-left:8px">${p.scan_count} scan${p.scan_count !== 1 ? 's' : ''} · Last: ${p.last_seen?.slice(0,10) || '-'}</span>
         </div>
-        <div style="display:flex;align-items:center;gap:8px">
-          ${p.total_vulns > 0 ? `<span style="font-size:13px;font-weight:700;color:var(--red)">${p.total_vulns} vulns</span>` : '<span style="color:var(--green);font-size:13px">Clean</span>'}
+        <div>
+          ${p.total_vulns > 0 ? `<span style="font-size:12px;color:var(--red)">${p.total_vulns} vulns</span>` : '<span style="font-size:12px;color:var(--green)">Clean</span>'}
         </div>
       </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px">
-        ${sev.critical ? `<span style="background:rgba(255,69,97,.12);color:var(--red);border:1px solid rgba(255,69,97,.3);padding:2px 8px;border-radius:4px;font-size:11px;font-family:var(--mono)">${sev.critical} critical</span>` : ''}
-        ${sev.high ? `<span style="background:rgba(255,140,66,.12);color:var(--orange);border:1px solid rgba(255,140,66,.3);padding:2px 8px;border-radius:4px;font-size:11px;font-family:var(--mono)">${sev.high} high</span>` : ''}
-        ${sev.medium ? `<span style="background:rgba(245,197,24,.1);color:var(--yellow);border:1px solid rgba(245,197,24,.3);padding:2px 8px;border-radius:4px;font-size:11px;font-family:var(--mono)">${sev.medium} med</span>` : ''}
+      <div style="display:flex;gap:4px;flex-wrap:wrap;margin:6px 0">
+        ${sev.critical ? `<span style="background:rgba(255,69,97,.12);color:var(--red);padding:1px 6px;border-radius:3px;font-size:10px;font-family:var(--mono)">${sev.critical} critical</span>` : ''}
+        ${sev.high ? `<span style="background:rgba(255,140,66,.12);color:var(--orange);padding:1px 6px;border-radius:3px;font-size:10px;font-family:var(--mono)">${sev.high} high</span>` : ''}
       </div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
-        <button onclick="startScanForTarget('${esc(p.target)}')" class="tbtn" style="font-size:11px">▶ Rescan</button>
-        <button onclick="showTargetNotes('${esc(p.target)}', '', '')" class="tbtn" style="font-size:11px">✏️ Notes</button>
-        <button onclick="switchMemoryTab('fps');loadFPList('${esc(p.target)}')" class="tbtn" style="font-size:11px">🚫 FPs</button>
-      </div>
+      ${notes ? `<div style="font-size:11px;color:var(--t3);font-family:var(--mono);font-style:italic;background:var(--bg1);padding:6px 10px;border-radius:4px;margin-top:4px">📝 ${esc(notes)}</div>` : ''}
     </div>`;
   }).join('');
+
+  const fpEl = document.getElementById('memory-fp-list');
+  if (fpEl && data.total_fp_filtered > 0) {
+    ws.send(JSON.stringify({action:'get_fp_list'}));
+  }
+}
+
+function addMemoryNote() {
+  const target = document.getElementById('memory-note-target').value.trim();
+  const text = document.getElementById('memory-note-text').value.trim();
+  const status = document.getElementById('memory-note-status');
+  if (!target || !text) {
+    if (status) { status.textContent = '❌ Fill in both target and note'; status.style.color = 'var(--red)'; }
+    return;
+  }
+  if (!ws || ws.readyState !== WebSocket.OPEN) {
+    if (status) { status.textContent = '❌ Not connected'; status.style.color = 'var(--red)'; }
+    return;
+  }
+  ws.send(JSON.stringify({action:'update_target_notes', target, notes: text}));
+  if (status) { status.textContent = '✅ Note saved — refresh memory to see it'; status.style.color = 'var(--green)'; }
+  document.getElementById('memory-note-target').value = '';
+  document.getElementById('memory-note-text').value = '';
 }
 
 // ════════════════════════════════════════════════════════
@@ -3037,7 +3109,7 @@ function loadFPList(target = null) {
 }
 
 function renderFPList(fps, target = null) {
-  const container = document.getElementById('fp-list-container');
+  const container = document.getElementById('memory-fp-list') || document.getElementById('fp-list-container');
   if (!container) return;
   if (!fps || fps.length === 0) {
     container.innerHTML = `<div class="empty"><div class="big">✅</div>No false positives${target ? ` for ${esc(target)}` : ''}.</div>`;
