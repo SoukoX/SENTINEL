@@ -55,7 +55,8 @@ URL="https://github.com/${REPO}/releases/download/${LATEST}/${ASSET}"
 
 echo -e "  Downloading ${BIN_NAME}…"
 mkdir -p "${INSTALL_DIR}"
-curl -sL "${URL}" -o "${INSTALL_DIR}/${BIN_NAME}" || {
+echo -e "  ${YELLOW}URL: ${URL}${NC}"
+curl -#L "${URL}" -o "${INSTALL_DIR}/${BIN_NAME}" || {
   echo -e "${RED}✘ Download failed.${NC}"
   exit 1
 }
