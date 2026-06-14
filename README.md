@@ -27,7 +27,7 @@ SENTINEL is an **AI-native agent** that thinks, explains, and adapts.
 | Tedious multi-tool workflows | **48 tools orchestrated** across a single 13-stage pipeline |
 | Brittle scanners that fail silently | **Self-healing pipeline** — resumes from failures, not from scratch |
 | Your data leaves your machine | **100% local** — zero telemetry, no cloud dependency |
-| Expensive AI subscriptions | **Free backends** — Ollama, Cerebras, OpenRouter, OpenCode |
+| Expensive AI subscriptions | **Free backends** — Ollama (local, no key), Cerebras, OpenRouter, OpenCode |
 | Restrictive "ethics" filters | **Uncensored** — no gatekeeping, no refusal |
 
 ---
@@ -41,9 +41,9 @@ SENTINEL is an **AI-native agent** that thinks, explains, and adapts.
 | AI generates & interprets commands | AI orchestrates every tool | Auto-retry, adapt, resume |
 | Learns from every scan | No scripting glue needed | Interrupt & continue later |
 | **🔒 Zero Trust Architecture** | **💸 Free AI Backends** | **🚀 One-Click Install** |
-| 100% local, zero telemetry | Ollama, Cerebras, OpenRouter, OpenCode | Single binary, no Python |
-| No API keys required | All free tiers, no subscription | `curl ... \| bash` and done |
-| Your data never leaves | Works offline with Ollama | Works on Linux & macOS |
+| 100% local, zero telemetry | Ollama (local, no key), Cerebras, OpenRouter, OpenCode | Single binary, no Python |
+| API keys needed for cloud backends only | All free tiers, no subscription | `curl ... \| bash` and done |
+| Your data never leaves | Works fully offline with Ollama | Works on Linux & macOS |
 
 ---
 
