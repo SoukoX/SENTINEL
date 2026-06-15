@@ -473,7 +473,7 @@ class LLMProvider:
                 except urllib.error.HTTPError as e:
                     err_body = e.read().decode()
                     if (backend.name == "opencode" and e.code == 403
-                            and "1010" in err_body and backend.api_key):
+                            and "1010" in err_body):
                         zen_url = "https://opencode.ai/zen/v1/chat/completions"
                         for zm in ["deepseek-v4-flash-free", "minimax-m3-free",
                                    "mimo-v2.5-free", "nemotron-3-ultra-free",
@@ -698,7 +698,7 @@ class LLMProvider:
                     err_body = e.read().decode()
                     # OpenCode 403/1010 (Cloudflare access denied) — try Zen endpoint
                     if (backend.name == "opencode" and e.code == 403
-                            and "1010" in err_body and backend.api_key):
+                            and "1010" in err_body):
                         zen_url = "https://opencode.ai/zen/v1/chat/completions"
                         zen_models = ["deepseek-v4-flash-free", "minimax-m3-free", "mimo-v2.5-free",
                                       "nemotron-3-ultra-free", "qwen3.6-plus-free", "north-mini-code-free"]
