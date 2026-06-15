@@ -103,7 +103,6 @@ _SCAN_DEDUP_WINDOW_SEC = 10.0      # ignore duplicate start_scan within 10s
 # ── Agent permission request system ──────────────────────────
 import uuid as _uuid
 _pending_permissions: dict[str, dict] = {}
-_agent_interrupted = threading.Event()
 
 def build_permission_callback(q_send):
     def request_permission(query: str) -> bool:
@@ -767,6 +766,7 @@ async def handle_connection(websocket):
         except (RuntimeError, AttributeError):
             pass  # Event loop no longer running
 
+    _agent_interrupted = threading.Event()
     try:
         async for raw in websocket:
             try:
@@ -1287,7 +1287,7 @@ async def handle_connection(websocket):
             # ── Agent Interrupt ───────────────────────────────────────────
             elif action == "agent_interrupt":
                 _agent_interrupted.set()
-                q("agent_interrupted", {})
+                q("agent_interrupted", data={})
 
             # ── Agent Chat (AI-powered reasoning loop with streaming) ──────────
             elif action == "agent_chat":
@@ -1306,7 +1306,7 @@ async def handle_connection(websocket):
                     continue
 
                 q("agent_start", goal=user_input[:80])
-                _agent_interrupted = threading.Event()
+                _agent_interrupted.clear()
 
                 def check_interrupted():
                     return _agent_interrupted.is_set()

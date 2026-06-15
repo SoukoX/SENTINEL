@@ -371,12 +371,13 @@ _run_dir_global: "Path | None" = None
 _current_stage_global: "str | None" = None
 _completed_stages_global: "list | None" = None
 
+_memory_available = False
+mem_mod = None
 try:
     import memory as mem_mod
     _memory_available = True
 except ImportError:
-    mem_mod = None
-    _memory_available = False
+    pass
 
 
 def _sigint_handler(sig, frame):
