@@ -1193,12 +1193,13 @@ def _call_openrouter(system: str, user: str, retry: int = 3) -> str:
         OPENROUTER_MODEL,
         # OpenRouter auto-router — picks best available free model
         "openrouter/free",
+        # Google Gemini (less rate-limited, fast)
+        "google/gemini-2.0-flash-001:free",
+        "google/gemini-2.0-flash-exp:free",
         # DeepSeek (strong for agentic coding tasks)
         "deepseek/deepseek-chat-v3-0324:free",
-        "deepseek/deepseek-r1:free",
         # Meta Llama
         "meta-llama/llama-3.3-70b-instruct:free",
-        "meta-llama/llama-4-maverick:free",
         # Google Gemma 4
         "google/gemma-4-31b-it:free",
         "google/gemma-4-26b-a4b-it:free",
@@ -1207,9 +1208,9 @@ def _call_openrouter(system: str, user: str, retry: int = 3) -> str:
         # NVIDIA Nemotron
         "nvidia/nemotron-3-ultra-550b-a55b:free",
         "nvidia/nemotron-3-super-120b-a12b:free",
-        "nvidia/nemotron-3-nano-30b-a3b:free",
         # Mistral
         "mistralai/mistral-small-24b-instruct-2501:free",
+        "mistralai/mistral-small-3.1-24b-instruct:free",
     ]
     # Deduplicate while preserving order
     seen: set = set()
@@ -1310,6 +1311,7 @@ def _call_opencode(system: str, user: str, retry: int = 2) -> str:
         "nemotron-3-super-free",
         "qwen3.6-plus-free",
         "north-mini-code-free",
+        "llama-3.3-70b-instruct-free",
     ]
     seen: set = set()
     model_list = [m for m in free_models if not (m in seen or seen.add(m))]
@@ -1381,8 +1383,8 @@ def _call_cerebras(system: str, user: str, retry: int = 2) -> str:
 
     free_models = [
         CEREBRAS_MODEL,
-        "llama-3.3-70b",
-        "llama-3.1-8b",
+        "llama3.3-70b",
+        "llama3.1-8b",
         "gpt-oss-120b",
     ]
     seen: set = set()

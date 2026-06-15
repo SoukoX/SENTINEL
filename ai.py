@@ -174,14 +174,17 @@ BACKENDS: dict[str, BackendConfig] = {
     "openrouter": BackendConfig(
         name="openrouter",
         api_key=os.environ.get("OPENROUTER_API_KEY"),
-        model="meta-llama/llama-3.3-70b-instruct:free",
+        model="google/gemini-2.0-flash-001:free",
         base_url="https://openrouter.ai/api/v1",
         rpm=15,
         fallback_models=[
+            "google/gemini-2.0-flash-exp:free",
             "deepseek/deepseek-chat-v3-0324:free",
             "qwen/qwen3-235b-a22b:free",
             "google/gemma-4-31b-it:free",
             "nvidia/nemotron-3-ultra-550b-a55b:free",
+            "meta-llama/llama-3.3-70b-instruct:free",
+            "mistralai/mistral-small-3.1-24b-instruct:free",
             "nvidia/nemotron-3-super-120b-a12b:free",
         ],
     ),
@@ -474,7 +477,8 @@ class LLMProvider:
                         zen_url = "https://opencode.ai/zen/v1/chat/completions"
                         for zm in ["deepseek-v4-flash-free", "minimax-m3-free",
                                    "mimo-v2.5-free", "nemotron-3-ultra-free",
-                                   "qwen3.6-plus-free", "north-mini-code-free"]:
+                                   "qwen3.6-plus-free", "north-mini-code-free",
+                                   "llama-3.3-70b-instruct-free"]:
                             body["model"] = zm
                             data = json.dumps(body).encode()
                             for use_key in [True, False]:
@@ -695,7 +699,8 @@ class LLMProvider:
                             and "1010" in err_body and backend.api_key):
                         zen_url = "https://opencode.ai/zen/v1/chat/completions"
                         zen_models = ["deepseek-v4-flash-free", "minimax-m3-free", "mimo-v2.5-free",
-                                      "nemotron-3-ultra-free", "qwen3.6-plus-free", "north-mini-code-free"]
+                                      "nemotron-3-ultra-free", "qwen3.6-plus-free", "north-mini-code-free",
+                                      "llama-3.3-70b-instruct-free"]
                         for zm in zen_models:
                             body["model"] = zm
                             data = json.dumps(body).encode()
