@@ -4271,7 +4271,6 @@ class AgentBrain:
             },
         }
         tool_schemas = list(tool_schemas) + [install_tool_schema, install_github_schema]
-        tool_schemas = list(tool_schemas) + [install_tool_schema]
 
         # Detect target from input
         target = self._extract_target(user_input)
