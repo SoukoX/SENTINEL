@@ -460,6 +460,7 @@ class LLMProvider:
             headers = {
                 "Content-Type": "application/json",
                 "Connection": "keep-alive",
+                "User-Agent": "Mozilla/5.0",
             }
             if backend.api_key:
                 headers["Authorization"] = f"Bearer {backend.api_key}"
@@ -474,6 +475,7 @@ class LLMProvider:
                     err_body = e.read().decode()
                     if (backend.name == "opencode" and e.code == 403
                             and "1010" in err_body):
+                        zen_ok = False
                         zen_url = "https://opencode.ai/zen/v1/chat/completions"
                         for zm in ["deepseek-v4-flash-free", "minimax-m3-free",
                                    "mimo-v2.5-free", "nemotron-3-ultra-free",
@@ -488,15 +490,16 @@ class LLMProvider:
                                 req = urllib.request.Request(zen_url, data=data, headers=h, method="POST")
                                 try:
                                     resp = urllib.request.urlopen(req, timeout=120)
+                                    zen_ok = True
                                     break
                                 except urllib.error.HTTPError:
                                     continue
-                            else:
-                                continue
+                            if zen_ok:
+                                break
+                        if zen_ok:
                             break
-                        else:
-                            last_error = "opencode: all free models failed via Zen endpoint"
-                            break
+                        last_error = "opencode: all free models failed via Zen endpoint"
+                        break
                     if e.code in (429, 502, 503) and attempt < max_retries - 1:
                         delay = float(e.headers.get("Retry-After", str(min(1.5**attempt, 8.0))))
                         time.sleep(delay)
@@ -655,6 +658,7 @@ class LLMProvider:
             headers = {
                 "Content-Type": "application/json",
                 "Connection": "keep-alive",
+                "User-Agent": "Mozilla/5.0",
             }
             if backend.api_key:
                 headers["Authorization"] = f"Bearer {backend.api_key}"
