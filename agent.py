@@ -1193,24 +1193,22 @@ def _call_openrouter(system: str, user: str, retry: int = 3) -> str:
         OPENROUTER_MODEL,
         # OpenRouter auto-router — picks best available free model
         "openrouter/free",
-        # Google Gemini (less rate-limited, fast)
-        "google/gemini-2.0-flash-001:free",
-        "google/gemini-2.0-flash-exp:free",
-        # DeepSeek (strong for agentic coding tasks)
-        "deepseek/deepseek-chat-v3-0324:free",
+        # Hermes 405B — large, less rate-limited
+        "nousresearch/hermes-3-llama-3.1-405b:free",
+        # Qwen Coder
+        "qwen/qwen3-coder:free",
+        "qwen/qwen3-next-80b-a3b-instruct:free",
         # Meta Llama
         "meta-llama/llama-3.3-70b-instruct:free",
         # Google Gemma 4
         "google/gemma-4-31b-it:free",
         "google/gemma-4-26b-a4b-it:free",
-        # Qwen
-        "qwen/qwen3-235b-a22b:free",
         # NVIDIA Nemotron
         "nvidia/nemotron-3-ultra-550b-a55b:free",
         "nvidia/nemotron-3-super-120b-a12b:free",
-        # Mistral
-        "mistralai/mistral-small-24b-instruct-2501:free",
-        "mistralai/mistral-small-3.1-24b-instruct:free",
+        "nvidia/nemotron-3-nano-30b-a3b:free",
+        # Dolphin
+        "cognitivecomputations/dolphin-mistral-24b-venice-edition:free",
     ]
     # Deduplicate while preserving order
     seen: set = set()
@@ -1308,10 +1306,8 @@ def _call_opencode(system: str, user: str, retry: int = 2) -> str:
         "minimax-m3-free",
         "mimo-v2.5-free",
         "nemotron-3-ultra-free",
-        "nemotron-3-super-free",
         "qwen3.6-plus-free",
         "north-mini-code-free",
-        "llama-3.3-70b-instruct-free",
     ]
     seen: set = set()
     model_list = [m for m in free_models if not (m in seen or seen.add(m))]
