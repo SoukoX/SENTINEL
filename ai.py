@@ -491,6 +491,9 @@ class LLMProvider:
                                     break
                                 except urllib.error.HTTPError:
                                     continue
+                            else:
+                                continue
+                            break
                         else:
                             last_error = "opencode: all free models failed via Zen endpoint"
                             break
