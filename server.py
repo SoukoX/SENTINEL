@@ -313,7 +313,7 @@ def validate_cerebras_key(api_key: str) -> tuple[bool, str]:
         return False, "Malformed Cerebras key — must start with 'csk-'"
 
     payload = json.dumps({
-        "model": "llama-3.3-70b",
+        "model": "llama3.3-70b",
         "messages": [{"role": "user", "content": "ping"}],
         "max_tokens": 1,
     }).encode()
