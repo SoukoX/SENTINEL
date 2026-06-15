@@ -3722,7 +3722,6 @@ def main():
                 ["template_id","name","severity","category","host","matched_at",
                  "raw_description","false_positive"], row
             )) for row in findings_rows]
-            import memory as mem_mod
             risk_score = mem_mod.compute_risk_score(finding_dicts) if hasattr(mem_mod, 'compute_risk_score') else 0
 
             # Build tech_stack from httpx live_hosts output
