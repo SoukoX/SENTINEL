@@ -103,6 +103,7 @@ _SCAN_DEDUP_WINDOW_SEC = 10.0      # ignore duplicate start_scan within 10s
 # ── Agent permission request system ──────────────────────────
 import uuid as _uuid
 _pending_permissions: dict[str, dict] = {}
+_agent_interrupted = threading.Event()
 
 def build_permission_callback(q_send):
     def request_permission(query: str) -> bool:

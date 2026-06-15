@@ -4191,7 +4191,7 @@ class AgentBrain:
                     if r.returncode == 0:
                         return ToolResult(success=True,
                             output=f"Installed {tool_name} from {repo_url} via go install")
-            elif Path(clone_dir / "Makefile").exists():
+            elif (Path(clone_dir) / "Makefile").exists():
                 r = subprocess.run(
                     ["make", "install"],
                     capture_output=True, text=True, timeout=120,
